@@ -94,7 +94,8 @@
     [_photoButton addTarget:self action:@selector(photoAction) forControlEvents:UIControlEventTouchUpInside];
     _photoButton.tag = MOREVIEW_BUTTON_TAG;
     [_scrollview addSubview:_photoButton];
-    
+  
+#if 0 // 隐藏发送位置按钮
     _locationButton =[UIButton buttonWithType:UIButtonTypeCustom];
     _locationButton.accessibilityIdentifier = @"location";
     [_locationButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
@@ -103,9 +104,10 @@
     [_locationButton addTarget:self action:@selector(locationAction) forControlEvents:UIControlEventTouchUpInside];
     _locationButton.tag = MOREVIEW_BUTTON_TAG + 1;
     [_scrollview addSubview:_locationButton];
+#endif
     
     _takePicButton =[UIButton buttonWithType:UIButtonTypeCustom];
-    [_takePicButton setFrame:CGRectMake(insets * 3 + CHAT_BUTTON_SIZE * 2, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
+    [_takePicButton setFrame:CGRectMake(insets * 2 + CHAT_BUTTON_SIZE, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
     [_takePicButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_camera"] forState:UIControlStateNormal];
     [_takePicButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_cameraSelected"] forState:UIControlStateHighlighted];
     [_takePicButton addTarget:self action:@selector(takePicAction) forControlEvents:UIControlEventTouchUpInside];
@@ -114,8 +116,9 @@
     [_scrollview addSubview:_takePicButton];
 
     CGRect frame = self.frame;
-    if (type == EMChatToolbarTypeChat) {
-        frame.size.height = 150;
+    if (type == EMChatToolbarTypeChat) { //单聊
+        frame.size.height = 80;
+#if 0
         _audioCallButton =[UIButton buttonWithType:UIButtonTypeCustom];
         [_audioCallButton setFrame:CGRectMake(insets * 4 + CHAT_BUTTON_SIZE * 3, 10, CHAT_BUTTON_SIZE , CHAT_BUTTON_SIZE)];
         [_audioCallButton setImage:[UIImage imageNamed:@"EaseUIResource.bundle/chatBar_colorMore_audioCall"] forState:UIControlStateNormal];
@@ -132,8 +135,13 @@
         _videoCallButton.tag =MOREVIEW_BUTTON_TAG + 4;
         _maxIndex = 4;
         [_scrollview addSubview:_videoCallButton];
+        
+        // 自定义
+        // 隐藏语音视频按钮
+        _audioCallButton.hidden = _videoCallButton.hidden = YES;
+#endif
     }
-    else if (type == EMChatToolbarTypeGroup)
+    else if (type == EMChatToolbarTypeGroup) // 群聊
     {
         frame.size.height = 80;
     }
