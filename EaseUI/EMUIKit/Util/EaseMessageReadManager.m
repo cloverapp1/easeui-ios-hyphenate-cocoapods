@@ -145,7 +145,11 @@ static EaseMessageReadManager *detailInstance = nil;
     }
     
     UIViewController *rootController = [self.keyWindow rootViewController];
-    [rootController presentViewController:self.photoNavigationController animated:YES completion:nil];
+    if (rootController.presentedViewController) {
+        [rootController.presentedViewController presentViewController:self.photoNavigationController animated:YES completion:nil];
+    }else{
+        [rootController presentViewController:self.photoNavigationController animated:YES completion:nil];
+    }
 }
 
 - (BOOL)prepareMessageAudioModel:(EaseMessageModel *)messageModel
