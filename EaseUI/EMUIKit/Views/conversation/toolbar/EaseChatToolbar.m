@@ -585,12 +585,12 @@
         return NO;
     }
     else if ([text isEqualToString:@"@"]) {
-        if ([self.delegate respondsToSelector:@selector(didInputAtInLocation:)]) {
-            if ([self.delegate didInputAtInLocation:range.location]) {
-                [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
-                return NO;
-            }
-        }
+//        if ([self.delegate respondsToSelector:@selector(didInputAtInLocation:)]) {
+//            if ([self.delegate didInputAtInLocation:range.location]) {
+//                [self _willShowInputTextViewToHeight:[self _getTextViewContentH:self.inputTextView]];
+//                return NO;
+//            }
+//        }
     }
     else if ([text length] == 0) {
         //delete one character
