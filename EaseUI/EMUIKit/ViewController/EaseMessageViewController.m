@@ -1843,7 +1843,8 @@
 - (void)sendTextMessage:(NSString *)text
 {
     NSDictionary *ext = nil;
-    if (self.conversation.type == EMConversationTypeGroupChat) {
+    
+    if (self.conversation.type == EMConversationTypeGroupChat) { //群聊消息
         NSArray *targets = [self _searchAtTargets:text];
         if ([targets count]) {
             __block BOOL atAll = NO;
@@ -1861,7 +1862,29 @@
             }
         }
     }
-    [self sendTextMessage:text withExt:ext];
+    
+    // 处理link
+    NSDataDetector *detect = [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray<NSTextCheckingResult*> *matches = [detect matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+    NSMutableArray *links = nil;
+    if (matches.count) {
+        links = [NSMutableArray arrayWithCapacity:matches.count];
+        for (NSTextCheckingResult *result in matches) {
+            if (result.resultType == NSTextCheckingTypeLink) {
+                [links addObject:[NSString stringWithFormat:@"%d,%d", result.range.location, result.range.length]];
+            }
+        }
+    }
+    
+    NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
+    if (ext) {
+        [mDict addEntriesFromDictionary:ext];
+    }
+    if (links.count) {
+        [mDict setObject:links forKey:kMessageLinkList];
+    }
+    
+    [self sendTextMessage:text withExt:mDict];
 }
 
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext

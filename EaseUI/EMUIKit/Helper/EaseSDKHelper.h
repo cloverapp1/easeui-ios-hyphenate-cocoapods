@@ -26,10 +26,15 @@
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 /** @brief 关闭实时音视频 */
 #define KNOTIFICATION_CALL_CLOSE @"callControllerClose"
+
 /** @brief 群组消息ext的字段，用于存放被@的环信id数组 */
 #define kGroupMessageAtList      @"em_at_list"
 /** @brief 群组消息ext字典中，kGroupMessageAtList字段的值，用于@所有人 */
 #define kGroupMessageAtAll       @"all"
+
+/** @brief 消息link ext字段  */
+#define kMessageLinkList        @"link_list"
+
 /** @brief 注册SDK时，是否允许控制台输出log */
 #define kSDKConfigEnableConsoleLogger @"SDKConfigEnableConsoleLogger"
 /** @brief 使用的SDK是否为Lite版本(即不包含实时音视频功能) */

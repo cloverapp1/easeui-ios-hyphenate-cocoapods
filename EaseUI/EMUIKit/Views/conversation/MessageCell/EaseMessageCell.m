@@ -21,6 +21,7 @@
 #import "UIImageView+WebCache.h"
 #import "EaseEmotionEscape.h"
 #import "EaseLocalDefine.h"
+#import "EaseSDKHelper.h"
 
 CGFloat const EaseMessageCellPadding = 10;
 
@@ -337,7 +338,24 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         switch (model.bodyType) {
             case EMMessageBodyTypeText:
             {
-                _bubbleView.textLabel.attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
+                if (!self.messageTextFont) {
+                    self.messageTextFont = [UIFont systemFontOfSize:15];
+                }
+                
+                NSAttributedString *attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
+                [_bubbleView.textLabel setText:attributedText];
+                
+                NSDictionary *ext = model.message.ext;
+                id obj = [ext objectForKey:kMessageLinkList];
+                if ([obj isKindOfClass:[NSArray class]] && [obj count]) {
+                    NSArray *links = obj;
+                    for (NSString *str in links) {
+                        NSArray<NSString*> *arr = [str componentsSeparatedByString:@","];
+                        NSRange range = NSMakeRange([arr[0] intValue], [arr[1] intValue]);
+                        [_bubbleView.textLabel addLinkToURL:[model.text substringWithRange:range] withRange:range];
+                    }
+                    _bubbleView.textLabel.userInteractionEnabled = YES;
+                }
             }
                 break;
             case EMMessageBodyTypeImage:
@@ -799,19 +817,9 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         case EMMessageBodyTypeText:
         {
             NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:cell.messageTextFont];
-            CGRect rect = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading context:nil];
-            height += (rect.size.height > 20 ? rect.size.height : 20) + 10;
-//            NSString *text = model.text;
-//            UIFont *textFont = cell.messageTextFont;
-//            CGSize retSize;
-//            if ([NSString instancesRespondToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
-//                retSize = [text boundingRectWithSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:textFont} context:nil].size;
-//            }else{
-//                retSize = [text sizeWithFont:textFont constrainedToSize:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-//            }
-//            
-//            
-//            height += (retSize.height > 20 ? retSize.height : 20) + 10;
+           CGFloat lableHeight = [TTTAttributedLabel sizeThatFitsAttributedString:text withConstraints:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) limitedToNumberOfLines:100].height;
+            height += (lableHeight > 20 ? lableHeight : 20) + 10;
+
         }
             break;
         case EMMessageBodyTypeImage:
