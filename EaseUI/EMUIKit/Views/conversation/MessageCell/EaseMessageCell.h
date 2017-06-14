@@ -190,6 +190,7 @@ typedef enum{
 
 @optional
 
+- (void)didSelectLinkWithURL:(NSURL *)url;
 /*
  *  消息点击回调
  *

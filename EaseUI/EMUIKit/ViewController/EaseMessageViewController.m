@@ -1185,6 +1185,10 @@
 
 #pragma mark - EaseMessageCellDelegate
 
+- (void)didSelectLinkWithURL:(NSURL *)url{
+    NSLog(@"didSelectLinkWithURL: %@", url.absoluteString);
+}
+
 - (void)messageCellSelected:(id<IMessageModel>)model
 {
     if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:didSelectMessageModel:)]) {

@@ -219,10 +219,28 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     [self _setupConstraints];
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bubbleViewTapAction:)];
+    tapRecognizer.delegate = self;
     [_bubbleView addGestureRecognizer:tapRecognizer];
     
     UITapGestureRecognizer *tapRecognizer2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarViewTapAction:)];
     [_avatarView addGestureRecognizer:tapRecognizer2];
+}
+
+#pragma mark tapGestureRecgnizerdelegate 解决手势冲突
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+        if (self.model.bodyType==EMMessageBodyTypeText) {
+            CGPoint pt = [touch locationInView:self.bubbleView.textLabel];
+            TTTAttributedLabelLink *link = [self.bubbleView.textLabel linkAtPoint:pt];
+            if (link) {
+                if (_delegate && [_delegate respondsToSelector:@selector(didSelectLinkWithURL:)]) {
+                    [_delegate didSelectLinkWithURL:[NSURL URLWithString:link.result.URL]];
+                }
+                return NO;
+            }
+        }
+    }
+    return YES;
 }
 
 #pragma mark - Setup Constraints
