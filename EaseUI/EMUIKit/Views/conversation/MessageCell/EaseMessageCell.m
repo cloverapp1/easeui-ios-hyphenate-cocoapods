@@ -228,16 +228,15 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 
 #pragma mark tapGestureRecgnizerdelegate 解决手势冲突
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
-        if (self.model.bodyType==EMMessageBodyTypeText) {
-            CGPoint pt = [touch locationInView:self.bubbleView.textLabel];
-            TTTAttributedLabelLink *link = [self.bubbleView.textLabel linkAtPoint:pt];
-            if (link) {
-                if (_delegate && [_delegate respondsToSelector:@selector(didSelectLinkWithURL:)]) {
-                    [_delegate didSelectLinkWithURL:[NSURL URLWithString:link.result.URL]];
-                }
-                return NO;
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] &&
+        self.model.bodyType==EMMessageBodyTypeText) {
+        CGPoint pt = [touch locationInView:self.bubbleView.textLabel];
+        TTTAttributedLabelLink *link = [self.bubbleView.textLabel linkAtPoint:pt];
+        if (link) {
+            if (_delegate && [_delegate respondsToSelector:@selector(didSelectLinkWithURL:)]) {
+                [_delegate didSelectLinkWithURL:link.result.URL];
             }
+            return NO;
         }
     }
     return YES;
@@ -369,8 +368,11 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                     NSArray *links = obj;
                     for (NSString *str in links) {
                         NSArray<NSString*> *arr = [str componentsSeparatedByString:@","];
-                        NSRange range = NSMakeRange([arr[0] intValue], [arr[1] intValue]);
-                        [_bubbleView.textLabel addLinkToURL:[model.text substringWithRange:range] withRange:range];
+                        if (arr.count==2) {
+                            NSRange range = NSMakeRange([arr[0] intValue], [arr[1] intValue]);
+                            NSURL *linkUrl = [NSURL URLWithString:[model.text substringWithRange:range]];
+                            [_bubbleView.textLabel addLinkToURL:linkUrl withRange:range];
+                        }
                     }
                     _bubbleView.textLabel.userInteractionEnabled = YES;
                 }
