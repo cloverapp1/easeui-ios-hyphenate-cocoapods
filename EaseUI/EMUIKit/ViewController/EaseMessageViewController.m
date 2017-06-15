@@ -1186,7 +1186,7 @@
 #pragma mark - EaseMessageCellDelegate
 
 - (void)didSelectLinkWithURL:(NSURL *)url{
-    NSLog(@"didSelectLinkWithURL: %@", url.absoluteString);
+    //NSLog(@"didSelectLinkWithURL: %@", url.absoluteString);
 }
 
 - (void)messageCellSelected:(id<IMessageModel>)model
@@ -1868,24 +1868,19 @@
     }
     
     // 处理link
-    NSDataDetector *detect = [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
-    NSArray<NSTextCheckingResult*> *matches = [detect matchesInString:text options:0 range:NSMakeRange(0, text.length)];
-    NSMutableArray *links = nil;
-    if (matches.count) {
-        links = [NSMutableArray arrayWithCapacity:matches.count];
-        for (NSTextCheckingResult *result in matches) {
-            if (result.resultType == NSTextCheckingTypeLink) {
-                [links addObject:[NSString stringWithFormat:@"%d,%d", result.range.location, result.range.length]];
-            }
-        }
-    }
-    
+    NSArray *linkRanges = [EaseSDKHelper parseUrlInMessage:text];
     NSMutableDictionary *mDict = [[NSMutableDictionary alloc] init];
     if (ext) {
         [mDict addEntriesFromDictionary:ext];
     }
-    if (links.count) {
-        [mDict setObject:links forKey:kMessageLinkList];
+    
+    if (linkRanges.count) {
+        NSMutableArray *linkExts = [NSMutableArray arrayWithCapacity:linkRanges.count];
+        for (NSValue *val in linkRanges) {
+            NSRange range = [val rangeValue];
+            [linkExts addObject:[NSString stringWithFormat:@"%d,%d", range.location, range.length]];
+        }
+        [mDict setObject:linkExts forKey:kMessageLinkList];
     }
     
     [self sendTextMessage:text withExt:mDict];

@@ -260,4 +260,19 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     return message;
 }
 
++(NSArray*)parseUrlInMessage:(NSString*)text{
+    NSDataDetector *detect = [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray<NSTextCheckingResult*> *matches = [detect matchesInString:text options:0 range:NSMakeRange(0, text.length)];
+    NSMutableArray *links = nil;
+    if (matches.count) {
+        links = [NSMutableArray arrayWithCapacity:matches.count];
+        for (NSTextCheckingResult *result in matches) {
+            if (result.resultType == NSTextCheckingTypeLink) {
+                [links addObject:[NSValue valueWithRange:result.range]];
+            }
+        }
+    }
+    return links;
+}
+
 @end

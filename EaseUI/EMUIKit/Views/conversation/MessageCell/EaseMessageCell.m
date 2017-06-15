@@ -344,6 +344,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 //    self.bubbleMaxWidthConstraint.active = YES;
 }
 
+
 #pragma mark - setter
 
 - (void)setModel:(id<IMessageModel>)model
@@ -362,9 +363,29 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 NSAttributedString *attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
                 [_bubbleView.textLabel setText:attributedText];
                 
-                NSDictionary *ext = model.message.ext;
-                id obj = [ext objectForKey:kMessageLinkList];
-                if ([obj isKindOfClass:[NSArray class]] && [obj count]) {
+                id obj = [model.message.ext objectForKey:kMessageLinkList];
+                if (obj==nil) {
+                    // ext不存在时处理文本得到link
+                    NSArray *linkRanges = [EaseSDKHelper parseUrlInMessage:model.text];
+                    if (linkRanges.count) {
+                        NSMutableArray *linkExts = [NSMutableArray arrayWithCapacity:linkRanges.count];
+                        for (NSValue *val in linkRanges) {
+                            NSRange range = [val rangeValue];
+                            [linkExts addObject:[NSString stringWithFormat:@"%d,%d", range.location, range.length]];
+                        }
+                        NSMutableDictionary *mExtDict = [NSMutableDictionary dictionaryWithDictionary:model.message.ext?:@{}];
+                        [mExtDict setObject:linkExts forKey:kMessageLinkList];
+                        
+                        model.message.ext = mExtDict;
+                        obj = linkExts;
+                    }else{ // 占位用，不需要每次解析
+                        NSMutableDictionary *mExtDict = [NSMutableDictionary dictionaryWithDictionary:model.message.ext?:@{}];
+                        [mExtDict setObject:@[] forKey:kMessageLinkList];
+                        model.message.ext = mExtDict;
+                    }
+                }
+                
+                if ([obj isKindOfClass:[NSArray class]] && [obj count]) { // 存在link ext
                     NSArray *links = obj;
                     for (NSString *str in links) {
                         NSArray<NSString*> *arr = [str componentsSeparatedByString:@","];

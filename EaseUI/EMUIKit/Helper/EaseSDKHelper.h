@@ -193,6 +193,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo;
                            messageType:(EMChatType)messageType
                             messageExt:(NSDictionary *)messageExt;
 
+
+/**
+ 解析文本消息中link
+ @param text 文本消息内容
+ */
++(NSArray*)parseUrlInMessage:(NSString*)text;
 #pragma mark - call
 
 @end
