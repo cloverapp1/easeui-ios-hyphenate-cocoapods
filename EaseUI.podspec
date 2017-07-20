@@ -12,7 +12,7 @@ Pod::Spec.new do |spec|
   spec.requires_arc = true
   spec.frameworks = 'Foundation', 'UIKit'
   spec.libraries    = 'stdc++'
-  spec.resources    = ['EaseUI/resources/EaseUIResource.bundle','EaseUI/MWPhotoBrowser/Assets/*.png']
+  spec.resources    = ['EaseUI/resources/EaseUIResource.bundle','EaseUI/resources/MWPhotoBrowser.bundle']
   spec.xcconfig     = {'OTHER_LDFLAGS' => '-ObjC'}		
   spec.dependency 'MJRefresh', '~> 3.1.0'
   spec.dependency 'TTTAttributedLabel'
