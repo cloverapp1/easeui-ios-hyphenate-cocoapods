@@ -139,9 +139,46 @@
     [[EaseBaseMessageCell appearance] setSendBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/气泡2"] resizableImageWithCapInsets:UIEdgeInsetsMake(30,15,10,10) resizingMode:UIImageResizingModeStretch]];
     [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:[[UIImage imageNamed:@"EaseUIResource.bundle/气泡3"] resizableImageWithCapInsets:UIEdgeInsetsMake(30,10,10,15)resizingMode:UIImageResizingModeStretch]];
 
+//    [[EaseBaseMessageCell appearance] setSendMessageVoiceAnimationImages:@[[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_full"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_000"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_001"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_002"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_003"]]];
+//    [[EaseBaseMessageCell appearance] setRecvMessageVoiceAnimationImages:@[[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing_full"],[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing000"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing001"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing002"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing003"]]];
     
-    [[EaseBaseMessageCell appearance] setSendMessageVoiceAnimationImages:@[[UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_full"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_000"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_001"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_002"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_sender_audio_playing_003"]]];
-    [[EaseBaseMessageCell appearance] setRecvMessageVoiceAnimationImages:@[[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing_full"],[UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing000"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing001"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing002"], [UIImage imageNamed:@"EaseUIResource.bundle/chat_receiver_audio_playing003"]]];
+    //切图大小不一致，额外裁剪
+    NSMutableArray *sendVoiceImages=[NSMutableArray array];
+    NSMutableArray *recvVoiceImages=[NSMutableArray array];
+    NSArray *sendImageNames=@[@"voice_send_3",@"voice_send_1",@"voice_send_2"];
+    NSArray *recvImageNames=@[@"voice_recv_3",@"voice_recv_1",@"voice_recv_2"];
+    for (NSInteger i=0; i<sendImageNames.count; i++) {
+        NSString *imageName=[NSString stringWithFormat:@"EaseUIResource.bundle/%@",sendImageNames[i]];
+        UIImage *image=[UIImage imageNamed:imageName];
+        if (!image) {
+            image=[UIImage new];
+        }
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(14, 21),NO,[UIScreen mainScreen].scale);
+        CGRect rect= CGRectMake(14-image.size.width, (21-image.size.height)/2.0, image.size.width, image.size.height);
+        [image drawInRect:rect];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        [sendVoiceImages addObject:image];
+    }
+    for (NSInteger i=0; i<recvImageNames.count; i++) {
+        NSString *imageName=[NSString stringWithFormat:@"EaseUIResource.bundle/%@",recvImageNames[i]];
+        UIImage *image=[UIImage imageNamed:imageName];
+        if (!image) {
+            image=[UIImage new];
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(14, 21),NO,[UIScreen mainScreen].scale);
+        CGRect rect= CGRectMake(0, (21-image.size.height)/2.0, image.size.width, image.size.height);
+        [image drawInRect:rect];
+        image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [recvVoiceImages addObject:image];
+    }
+    [[EaseBaseMessageCell appearance] setSendMessageVoiceAnimationImages:sendVoiceImages];
+    [[EaseBaseMessageCell appearance] setRecvMessageVoiceAnimationImages:recvVoiceImages];
+
     
     [[EaseBaseMessageCell appearance] setAvatarSize:40.f];
     [[EaseBaseMessageCell appearance] setAvatarCornerRadius:20.f];
