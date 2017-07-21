@@ -69,7 +69,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     cell.rightBubbleMargin = UIEdgeInsetsMake(8, 10, 8, 15);
     cell.bubbleMargin = UIEdgeInsetsMake(8, 0, 8, 0);
     
-    cell.messageTextFont = [UIFont systemFontOfSize:15];
+    cell.messageTextFont = [UIFont systemFontOfSize:16];
     cell.messageTextColor = [UIColor blackColor];
     
     cell.messageLocationFont = [UIFont systemFontOfSize:10];
@@ -168,7 +168,12 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 [_bubbleView setupTextBubbleView];
                 
                 _bubbleView.textLabel.font = _messageTextFont;
-                _bubbleView.textLabel.textColor = _messageTextColor;
+                if (self.model.isSender) {
+                    _bubbleView.textLabel.textColor=[UIColor whiteColor];
+                }
+                else{
+                    _bubbleView.textLabel.textColor = _messageTextColor;
+                }
             }
                 break;
             case EMMessageBodyTypeImage:
@@ -359,8 +364,15 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 if (!self.messageTextFont) {
                     self.messageTextFont = [UIFont systemFontOfSize:15];
                 }
-                
-                NSAttributedString *attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
+
+                NSMutableAttributedString *attributedText = (NSMutableAttributedString *)[[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
+                if (self.model.isSender) {
+                    [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, model.text.length)];
+                }
+                else{
+                    [attributedText addAttribute:NSForegroundColorAttributeName value:_messageTextColor range:NSMakeRange(0, model.text.length)];
+                }
+
                 [_bubbleView.textLabel setText:attributedText];
                 
                 id obj = [model.message.ext objectForKey:kMessageLinkList];
