@@ -13,6 +13,8 @@
 
 #import <UIKit/UIKit.h>
 #import "TTTAttributedLabel.h"
+#import "EaseBubbleViewImageView.h"
+
 
 extern CGFloat const EaseMessageCellPadding;
 
@@ -48,7 +50,7 @@ extern NSString *const EaseMessageCellIdentifierRecvFile;
 @property (strong, nonatomic) TTTAttributedLabel *textLabel;
 
 //image views
-@property (strong, nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) EaseBubbleViewImageView *imageView;
 
 //location views
 @property (strong, nonatomic) UIImageView *locationImageView;
