@@ -1117,8 +1117,8 @@
             sendCell.delegate = self;
         }
         
-        [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];//横向抗压缩
-        [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisVertical];
+        [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow-1 forAxis:UILayoutConstraintAxisHorizontal];//横向抗压缩
+        [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow-1 forAxis:UILayoutConstraintAxisVertical];
         sendCell.messageTextColor=[UIColor colorWithWhite:0x33/255.0 alpha:1];
         sendCell.messageTextFont=[UIFont systemFontOfSize:16];
         sendCell.avatarCornerRadius=5;
