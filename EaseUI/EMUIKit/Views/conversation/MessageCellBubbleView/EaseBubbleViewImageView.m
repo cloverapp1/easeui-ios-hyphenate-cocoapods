@@ -7,6 +7,7 @@
 //
 
 #import "EaseBubbleViewImageView.h"
+#import "EaseBubbleView.h"
 
 @implementation EaseBubbleViewImageView
 
@@ -20,7 +21,14 @@
 - (void)layoutSubviews
 {
     //            [_bubbleView.imageView.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-    UIImage *image=[(UIImageView *)self.superview image];
+    
+    UIImage *image;//
+    if ([self.superview isKindOfClass:[UIImageView class]]) {
+        image =[(UIImageView *)self.superview image];
+    }
+    else if([self.superview isKindOfClass:[EaseBubbleView class]]){
+        image = [(EaseBubbleView *)self.superview backgroundImageView].image;
+    }
     if (!image) {
         return;
     }
