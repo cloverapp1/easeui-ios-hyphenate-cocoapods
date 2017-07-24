@@ -17,4 +17,5 @@ Pod::Spec.new do |spec|
   spec.dependency 'MJRefresh', '~> 3.1.0'
   spec.dependency 'TTTAttributedLabel'
   spec.dependency 'DACircularProgress', '~> 2.3'
+  spec.dependency 'Hyphenate', '= 3.3.2'
 end
