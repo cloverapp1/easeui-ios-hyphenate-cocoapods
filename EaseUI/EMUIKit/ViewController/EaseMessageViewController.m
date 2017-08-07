@@ -1116,6 +1116,13 @@
             sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
             sendCell.delegate = self;
         }
+        if (_conversation.type == EMChatTypeChat || model.isSender) {
+            sendCell.messageNameHeight = 0;
+            sendCell.messageNameIsHidden = YES;
+        }else {
+            sendCell.messageNameHeight = 16;
+            sendCell.messageNameIsHidden = NO;
+        }
         
         [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow-1 forAxis:UILayoutConstraintAxisHorizontal];//横向抗压缩
         [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow-1 forAxis:UILayoutConstraintAxisVertical];
