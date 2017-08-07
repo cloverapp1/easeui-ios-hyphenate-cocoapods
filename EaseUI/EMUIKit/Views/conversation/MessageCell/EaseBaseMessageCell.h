@@ -37,17 +37,17 @@ extern NSString *const EaseMessageCellIdentifierSendFile;
 /*
  *  昵称显示字体
  */
-@property (nonatomic) UIFont *messageNameFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:11];
+@property (nonatomic) UIFont *messageNameFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:10];
 
 /*
  *  昵称显示颜色
  */
-@property (nonatomic) UIColor *messageNameColor UI_APPEARANCE_SELECTOR; //default [UIColor colorWithRed:0x66/255.0 green:0x66/255.0 blue:0x66/255.0 alpha:1];
+@property (nonatomic) UIColor *messageNameColor UI_APPEARANCE_SELECTOR; //default [UIColor grayColor];
 
 /*
  *  昵称显示高度
  */
-@property (nonatomic) CGFloat messageNameHeight UI_APPEARANCE_SELECTOR; //default 16;
+@property (nonatomic) CGFloat messageNameHeight UI_APPEARANCE_SELECTOR; //default 15;
 
 /*
  *  昵称是否显示

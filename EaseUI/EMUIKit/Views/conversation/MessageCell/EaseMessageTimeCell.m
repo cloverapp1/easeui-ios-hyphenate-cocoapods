@@ -26,7 +26,7 @@ CGFloat const EaseMessageTimeCellPadding = 5;
 {
     // UIAppearance Proxy Defaults
     EaseMessageTimeCell *cell = [self appearance];
-    cell.titleLabelColor = [UIColor colorWithRed:0x99/255.0 green:0x99/255.0 blue:0x99/255.0 alpha:1];
+    cell.titleLabelColor = [UIColor grayColor];
     cell.titleLabelFont = [UIFont systemFontOfSize:12];
 }
 

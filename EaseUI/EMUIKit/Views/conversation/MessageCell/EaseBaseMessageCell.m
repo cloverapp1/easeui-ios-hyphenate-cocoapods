@@ -41,9 +41,9 @@
     cell.avatarSize = 30;
     cell.avatarCornerRadius = 0;
     
-    cell.messageNameColor = [UIColor colorWithRed:0x66/255.0 green:0x66/255.0 blue:0x66/255.0 alpha:1];
-    cell.messageNameFont = [UIFont systemFontOfSize:11];
-    cell.messageNameHeight = 16;
+    cell.messageNameColor = [UIColor grayColor];
+    cell.messageNameFont = [UIFont systemFontOfSize:10];
+    cell.messageNameHeight = 15;
     if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
         cell.messageNameIsHidden = NO;
     }
@@ -69,7 +69,7 @@
         [self configureLayoutConstraintsWithModel:model];
         
         if ([UIDevice currentDevice].systemVersion.floatValue == 7.0) {
-            self.messageNameHeight = 16;
+            self.messageNameHeight = 15;
         }
     }
     
@@ -165,7 +165,7 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     
     //name label
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:EaseMessageCellPadding]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-EaseMessageCellPadding]];
     
@@ -204,7 +204,7 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     
     //name label
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:EaseMessageCellPadding]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeRight multiplier:1.0 constant:EaseMessageCellPadding]];
     
@@ -359,7 +359,7 @@
     CGFloat minHeight = cell.avatarSize + EaseMessageCellPadding * 2;
     CGFloat height = cell.messageNameHeight;
     if ([UIDevice currentDevice].systemVersion.floatValue == 7.0) {
-        height = 16;
+        height = 15;
     }
     height += - EaseMessageCellPadding + [EaseMessageCell cellHeightWithModel:model];
     height = height > minHeight ? height : minHeight;
