@@ -48,7 +48,7 @@
     self.textLabel.numberOfLines = 0;
     self.textLabel.font = [UIFont systemFontOfSize:15];
     [self.backgroundImageView addSubview:self.textLabel];
-    
+    self.textLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
     [self _setupTextBubbleConstraints];
 }
 

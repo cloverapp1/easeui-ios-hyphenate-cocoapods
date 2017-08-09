@@ -364,7 +364,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 if (!self.messageTextFont) {
                     self.messageTextFont = [UIFont systemFontOfSize:15];
                 }
-
+                
                 NSMutableAttributedString *attributedText = (NSMutableAttributedString *)[[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
                 if (self.model.isSender) {
                     [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, model.text.length)];
@@ -404,6 +404,18 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                         if (arr.count==2) {
                             NSRange range = NSMakeRange([arr[0] intValue], [arr[1] intValue]);
                             NSURL *linkUrl = [NSURL URLWithString:[model.text substringWithRange:range]];
+                            NSMutableDictionary *linkAttributes = [NSMutableDictionary dictionaryWithDictionary:_bubbleView.textLabel.linkAttributes];
+                            [linkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+                            UIColor *linkColor;
+                            if (model.isSender) {
+                                linkColor=[UIColor whiteColor];
+                            }
+                            else{
+                                linkColor = _messageTextColor;
+                            }
+                            [linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+                            [linkAttributes setValue:(__bridge id)linkColor.CGColor forKey:(NSString *)kCTForegroundColorAttributeName];
+                            _bubbleView.textLabel.linkAttributes = linkAttributes;
                             [_bubbleView.textLabel addLinkToURL:linkUrl withRange:range];
                         }
                     }
