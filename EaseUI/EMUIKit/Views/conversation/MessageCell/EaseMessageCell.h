@@ -25,8 +25,13 @@
 #define kEMMessageLocationHeight 95
 /** @brief 语音消息cell的高度 */
 #define kEMMessageVoiceHeight 23
+/** @brief 头像尺寸大小 */
+#define kEMAvatarSize 37
+/** @brief 消息显示字体 */
+#define kEMMessageTextFont [UIFont systemFontOfSize:16]
 
 extern CGFloat const EaseMessageCellPadding;
+extern CGFloat const EaseMessageCellBubblePadding;
 
 typedef enum{
     EaseMessageCellEvenVideoBubbleTap,      /** @brief 视频消息cell点击 */
@@ -79,13 +84,11 @@ typedef enum{
 /*
  *  聊天气泡的最大宽度
  */
-@property (nonatomic) CGFloat bubbleMaxWidth UI_APPEARANCE_SELECTOR; //default 200;
+@property (nonatomic) CGFloat bubbleMaxWidth UI_APPEARANCE_SELECTOR; //;
 
-@property (nonatomic) UIEdgeInsets bubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 0, 8, 0);
+@property (nonatomic) UIEdgeInsets leftBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 17, 8, 10);
 
-@property (nonatomic) UIEdgeInsets leftBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 15, 8, 10);
-
-@property (nonatomic) UIEdgeInsets rightBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 10, 8, 15);
+@property (nonatomic) UIEdgeInsets rightBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 10, 8, 17);
 
 /*
  *  发送者气泡图片
@@ -97,10 +100,7 @@ typedef enum{
  */
 @property (strong, nonatomic) UIImage *recvBubbleBackgroundImage UI_APPEARANCE_SELECTOR;
 
-/*
- *  消息显示字体
- */
-@property (nonatomic) UIFont *messageTextFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:15];
+
 
 /*
  *  消息显示颜色

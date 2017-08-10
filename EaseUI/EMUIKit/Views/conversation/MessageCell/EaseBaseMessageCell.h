@@ -25,11 +25,6 @@ extern NSString *const EaseMessageCellIdentifierSendFile;
 }
 
 /*
- *  头像尺寸大小
- */
-@property (nonatomic) CGFloat avatarSize UI_APPEARANCE_SELECTOR; //default 30;
-
-/*
  *  头像圆角
  */
 @property (nonatomic) CGFloat avatarCornerRadius UI_APPEARANCE_SELECTOR; //default 0;

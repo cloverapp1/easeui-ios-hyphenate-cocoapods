@@ -18,7 +18,6 @@
 
 @property (strong, nonatomic) UILabel *nameLabel;
 
-@property (nonatomic) NSLayoutConstraint *avatarWidthConstraint;
 @property (nonatomic) NSLayoutConstraint *nameHeightConstraint;
 
 @property (nonatomic) NSLayoutConstraint *bubbleWithAvatarRightConstraint;
@@ -38,7 +37,7 @@
 {
     // UIAppearance Proxy Defaults
     EaseBaseMessageCell *cell = [self appearance];
-    cell.avatarSize = 30;
+    
     cell.avatarCornerRadius = 0;
     
     cell.messageNameColor = [UIColor colorWithRed:0x66/255.0 green:0x66/255.0 blue:0x66/255.0 alpha:1];
@@ -47,8 +46,7 @@
     if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
         cell.messageNameIsHidden = NO;
     }
-    
-//    cell.bubbleMargin = UIEdgeInsetsMake(8, 15, 8, 10);
+
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
@@ -160,8 +158,6 @@
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-EaseMessageCellPadding]];
     
-    self.avatarWidthConstraint = [NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.avatarSize];
-    [self addConstraint:self.avatarWidthConstraint];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     
     //name label
@@ -173,7 +169,7 @@
     [self addConstraint:self.nameHeightConstraint];
     
     //bubble view
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-EaseMessageCellPadding]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-EaseMessageCellBubblePadding]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
     
     //status button
@@ -199,9 +195,7 @@
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:EaseMessageCellPadding]];
     
-    self.avatarWidthConstraint = [NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.avatarSize];
-    [self addConstraint:self.avatarWidthConstraint];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
+    
     
     //name label
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:EaseMessageCellPadding]];
@@ -212,27 +206,11 @@
     [self addConstraint:self.nameHeightConstraint];
     
     //bubble view
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeRight multiplier:1.0 constant:EaseMessageCellPadding]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeRight multiplier:1.0 constant:EaseMessageCellBubblePadding]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
 }
 
 #pragma mark - Update Constraint
-
-/*!
- @method
- @brief 更新头像宽度的约束
- @discussion
- @result
- */
-- (void)_updateAvatarViewWidthConstraint
-{
-    if (self.avatarView) {
-        [self removeConstraint:self.avatarWidthConstraint];
-        
-        self.avatarWidthConstraint = [NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:self.avatarSize];
-        [self addConstraint:self.avatarWidthConstraint];
-    }
-}
 
 /*!
  @method
@@ -320,13 +298,6 @@
     }
 }
 
-- (void)setAvatarSize:(CGFloat)avatarSize
-{
-    _avatarSize = avatarSize;
-    if (self.avatarView) {
-        [self _updateAvatarViewWidthConstraint];
-    }
-}
 
 - (void)setAvatarCornerRadius:(CGFloat)avatarCornerRadius
 {
@@ -356,7 +327,7 @@
 {
     EaseBaseMessageCell *cell = [self appearance];
     
-    CGFloat minHeight = cell.avatarSize + EaseMessageCellPadding * 2;
+    CGFloat minHeight = kEMAvatarSize + EaseMessageCellPadding * 2;
     CGFloat height = cell.messageNameHeight;
     if ([UIDevice currentDevice].systemVersion.floatValue == 7.0) {
         height = 16;

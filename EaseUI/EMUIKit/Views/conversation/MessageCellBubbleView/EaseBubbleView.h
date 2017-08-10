@@ -17,6 +17,7 @@
 
 
 extern CGFloat const EaseMessageCellPadding;
+extern CGFloat const EaseMessageCellBubblePadding;
 
 extern NSString *const EaseMessageCellIdentifierSendText;
 extern NSString *const EaseMessageCellIdentifierSendLocation;

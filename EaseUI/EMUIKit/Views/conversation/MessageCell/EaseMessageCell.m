@@ -24,6 +24,7 @@
 #import "EaseSDKHelper.h"
 
 CGFloat const EaseMessageCellPadding = 10;
+CGFloat const EaseMessageCellBubblePadding = 4;
 
 NSString *const EaseMessageCellIdentifierRecvText = @"EaseMessageCellRecvText";
 NSString *const EaseMessageCellIdentifierRecvLocation = @"EaseMessageCellRecvLocation";
@@ -44,10 +45,13 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     EMMessageBodyType _messageType;
 }
 
+@property (nonatomic) UIEdgeInsets bubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 0, 8, 0);
+
 @property (nonatomic) NSLayoutConstraint *statusWidthConstraint;
 @property (nonatomic) NSLayoutConstraint *activtiyWidthConstraint;
 @property (nonatomic) NSLayoutConstraint *hasReadWidthConstraint;
 @property (nonatomic) NSLayoutConstraint *bubbleMaxWidthConstraint;
+@property (nonatomic) NSLayoutConstraint *avatarWidthConstraint;
 
 @end
 
@@ -64,12 +68,11 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     EaseMessageCell *cell = [self appearance];
     cell.statusSize = 20;
     cell.activitySize = 20;
-    cell.bubbleMaxWidth = 200;
-    cell.leftBubbleMargin = UIEdgeInsetsMake(8, 15, 8, 10);
-    cell.rightBubbleMargin = UIEdgeInsetsMake(8, 10, 8, 15);
+    cell.leftBubbleMargin = UIEdgeInsetsMake(8, 17, 8, 10);
+    cell.rightBubbleMargin = UIEdgeInsetsMake(8, 10, 8, 17);
     cell.bubbleMargin = UIEdgeInsetsMake(8, 0, 8, 0);
+    cell.bubbleMaxWidth = [UIScreen mainScreen].bounds.size.width - (kEMAvatarSize + EaseMessageCellPadding) * 2.0 - EaseMessageCellBubblePadding * 2.0 - 7;
     
-    cell.messageTextFont = [UIFont systemFontOfSize:16];
     cell.messageTextColor = [UIColor blackColor];
     
     cell.messageLocationFont = [UIFont systemFontOfSize:10];
@@ -166,8 +169,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             case EMMessageBodyTypeText:
             {
                 [_bubbleView setupTextBubbleView];
-                
-                _bubbleView.textLabel.font = _messageTextFont;
+            
+                _bubbleView.textLabel.font = kEMMessageTextFont;
                 if (self.model.isSender) {
                     _bubbleView.textLabel.textColor=[UIColor whiteColor];
                 }
@@ -260,7 +263,12 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     //bubble view
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-EaseMessageCellPadding]];
     
-    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.bubbleMaxWidth];
+    
+    self.avatarWidthConstraint = [NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:kEMAvatarSize];
+    [self addConstraint:self.avatarWidthConstraint];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
+    
+    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:_bubbleMaxWidth];
     [self addConstraint:self.bubbleMaxWidthConstraint];
 //    self.bubbleMaxWidthConstraint.active = YES;
     
@@ -334,6 +342,22 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 
 /*!
  @method
+ @brief 更新头像宽度的约束
+ @discussion
+ @result
+ */
+- (void)_updateAvatarViewWidthConstraint
+{
+    if (self.avatarView) {
+        [self removeConstraint:self.avatarWidthConstraint];
+        
+        self.avatarWidthConstraint = [NSLayoutConstraint constraintWithItem:self.avatarView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:kEMAvatarSize];
+        [self addConstraint:self.avatarWidthConstraint];
+    }
+}
+
+/*!
+ @method
  @brief 修改气泡的宽度约束
  @discussion
  @result
@@ -344,7 +368,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 //    self.bubbleMaxWidthConstraint.active = NO;
     
     //气泡宽度小于等于bubbleMaxWidth
-    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.bubbleMaxWidth];
+    self.bubbleMaxWidthConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:_bubbleMaxWidth];
     [self addConstraint:self.bubbleMaxWidthConstraint];
 //    self.bubbleMaxWidthConstraint.active = YES;
 }
@@ -361,11 +385,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         switch (model.bodyType) {
             case EMMessageBodyTypeText:
             {
-                if (!self.messageTextFont) {
-                    self.messageTextFont = [UIFont systemFontOfSize:15];
-                }
                 
-                NSMutableAttributedString *attributedText = (NSMutableAttributedString *)[[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:self.messageTextFont];
+                NSMutableAttributedString *attributedText = (NSMutableAttributedString *)[[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
                 if (self.model.isSender) {
                     [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, model.text.length)];
                 }
@@ -523,8 +544,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     _recvBubbleBackgroundImage = recvBubbleBackgroundImage;
 }
 
-- (void)setBubbleMaxWidth:(CGFloat)bubbleMaxWidth
-{
+
+- (void)setBubbleMaxWidth:(CGFloat)bubbleMaxWidth {
     _bubbleMaxWidth = bubbleMaxWidth;
     [self _updateBubbleMaxWidthConstraint];
 }
@@ -543,6 +564,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 {
     _bubbleMargin = bubbleMargin;
     _bubbleMargin = self.model.isSender ? _rightBubbleMargin:_leftBubbleMargin;
+    
     if ([self respondsToSelector:@selector(isCustomBubbleView:)] && [self isCustomBubbleView:_model]) {
         [self updateCustomBubbleViewMargin:_bubbleMargin model:_model];
     } else {
@@ -583,14 +605,6 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             }
             
         }
-    }
-}
-
-- (void)setMessageTextFont:(UIFont *)messageTextFont
-{
-    _messageTextFont = messageTextFont;
-    if (_bubbleView.textLabel) {
-        _bubbleView.textLabel.font = messageTextFont;
     }
 }
 
@@ -873,9 +887,6 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     
     EaseMessageCell *cell = [self appearance];
     CGFloat bubbleMaxWidth = cell.bubbleMaxWidth;
-    if ([UIDevice currentDevice].systemVersion.floatValue == 7.0) {
-        bubbleMaxWidth = 200;
-    }
     bubbleMaxWidth -= (cell.leftBubbleMargin.left + cell.leftBubbleMargin.right + cell.rightBubbleMargin.left + cell.rightBubbleMargin.right)/2;
     
     CGFloat height;
@@ -888,7 +899,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     switch (model.bodyType) {
         case EMMessageBodyTypeText:
         {
-            NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:cell.messageTextFont];
+            NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
            CGFloat lableHeight = [TTTAttributedLabel sizeThatFitsAttributedString:text withConstraints:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) limitedToNumberOfLines:100].height;
             height += (lableHeight > 20 ? lableHeight : 20) + 10;
 

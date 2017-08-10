@@ -179,10 +179,6 @@
     [[EaseBaseMessageCell appearance] setSendMessageVoiceAnimationImages:sendVoiceImages];
     [[EaseBaseMessageCell appearance] setRecvMessageVoiceAnimationImages:recvVoiceImages];
 
-    
-    [[EaseBaseMessageCell appearance] setAvatarSize:40.f];
-    [[EaseBaseMessageCell appearance] setAvatarCornerRadius:20.f];
-    
     [[EaseChatBarMoreView appearance] setMoreViewBackgroundColor:[UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0]];
     
     [self tableViewDidTriggerHeaderRefresh];
@@ -1127,8 +1123,7 @@
         [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow-1 forAxis:UILayoutConstraintAxisHorizontal];//横向抗压缩
         [sendCell.bubbleView.backgroundImageView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow-1 forAxis:UILayoutConstraintAxisVertical];
         sendCell.messageTextColor=[UIColor colorWithWhite:0x33/255.0 alpha:1];
-        sendCell.messageTextFont=[UIFont systemFontOfSize:16];
-        sendCell.avatarCornerRadius=5;
+        sendCell.avatarCornerRadius=2.5;
         sendCell.model = model;
         return sendCell;
     }
