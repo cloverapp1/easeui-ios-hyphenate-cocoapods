@@ -68,9 +68,9 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     EaseMessageCell *cell = [self appearance];
     cell.statusSize = 20;
     cell.activitySize = 20;
-    cell.leftBubbleMargin = UIEdgeInsetsMake(8, 17, 8, 10);
-    cell.rightBubbleMargin = UIEdgeInsetsMake(8, 10, 8, 17);
-    cell.bubbleMargin = UIEdgeInsetsMake(8, 0, 8, 0);
+    cell.leftBubbleMargin = UIEdgeInsetsMake(12, 22, 12, 15);
+    cell.rightBubbleMargin = UIEdgeInsetsMake(12, 15, 12, 22);
+    cell.bubbleMargin = UIEdgeInsetsMake(12, 0, 12, 0);
     cell.bubbleMaxWidth = [UIScreen mainScreen].bounds.size.width - (kEMAvatarSize + EaseMessageCellPadding) * 2.0 - EaseMessageCellBubblePadding * 2.0 - 7;
     
     cell.messageTextColor = [UIColor blackColor];
@@ -393,7 +393,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 else{
                     [attributedText addAttribute:NSForegroundColorAttributeName value:_messageTextColor range:NSMakeRange(0, model.text.length)];
                 }
-
+                attributedText = [EaseMessageCell addPragraphLineSpacingForString:attributedText];
+                
                 [_bubbleView.textLabel setText:attributedText];
                 
                 id obj = [model.message.ext objectForKey:kMessageLinkList];
@@ -427,15 +428,15 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                             NSURL *linkUrl = [NSURL URLWithString:[model.text substringWithRange:range]];
                             NSMutableDictionary *linkAttributes = [NSMutableDictionary dictionaryWithDictionary:_bubbleView.textLabel.linkAttributes];
                             [linkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-                            UIColor *linkColor;
-                            if (model.isSender) {
-                                linkColor=[UIColor whiteColor];
-                            }
-                            else{
-                                linkColor = _messageTextColor;
-                            }
-                            [linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-                            [linkAttributes setValue:(__bridge id)linkColor.CGColor forKey:(NSString *)kCTForegroundColorAttributeName];
+//                            UIColor *linkColor;
+//                            if (model.isSender) {
+//                                linkColor=[UIColor whiteColor];
+//                            }
+//                            else{
+//                                linkColor = _messageTextColor;
+//                            }
+//                            [linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+                            [linkAttributes setValue:(__bridge id)[UIColor colorWithRed:0x02/255.0 green:0xfd/255.0  blue:0x20/255.0  alpha:1].CGColor forKey:(NSString *)kCTForegroundColorAttributeName];
                             _bubbleView.textLabel.linkAttributes = linkAttributes;
                             [_bubbleView.textLabel addLinkToURL:linkUrl withRange:range];
                         }
@@ -808,6 +809,22 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 
 }*/
 
+#pragma mark - private
+
++ (NSAttributedString *)addPragraphLineSpacingForString:(NSAttributedString *)string {
+    if (string == nil) {
+        string = @"";
+    }
+    NSMutableAttributedString *attributedString = [string mutableCopy];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:4];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [string length])];
+    
+    return [attributedString copy];
+}
+
+
+
 #pragma mark - public
 
 /*!
@@ -900,6 +917,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         case EMMessageBodyTypeText:
         {
             NSAttributedString *text = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
+            text = [self addPragraphLineSpacingForString:text];
            CGFloat lableHeight = [TTTAttributedLabel sizeThatFitsAttributedString:text withConstraints:CGSizeMake(bubbleMaxWidth, CGFLOAT_MAX) limitedToNumberOfLines:100].height;
             height += (lableHeight > 20 ? lableHeight : 20) + 10;
 
