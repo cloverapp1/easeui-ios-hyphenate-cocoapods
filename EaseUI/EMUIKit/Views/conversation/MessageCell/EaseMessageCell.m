@@ -386,7 +386,15 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
         switch (model.bodyType) {
             case EMMessageBodyTypeText:
             {
-                _bubbleView.textLabel.attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
+                
+                NSMutableAttributedString *mAttrString = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
+                if (self.model.isSender) {
+                    [mAttrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, model.text.length)];
+                }
+                else{
+                    [mAttrString addAttribute:NSForegroundColorAttributeName value:_messageTextColor range:NSMakeRange(0, model.text.length)];
+                }
+                _bubbleView.textLabel.attributedText = mAttrString;
                 _bubbleView.textLabel.userInteractionEnabled = YES;
             }
                 break;
