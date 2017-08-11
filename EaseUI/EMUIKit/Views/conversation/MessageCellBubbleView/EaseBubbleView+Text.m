@@ -41,7 +41,12 @@
 
 - (void)setupTextBubbleView
 {
-    self.textLabel = [[UILabel alloc] init];
+    self.textLabel = [[KILabel alloc] initWithFrame:CGRectZero];
+    self.textLabel.systemURLStyle = NO;
+    self.textLabel.automaticLinkDetectionEnabled = YES;
+    self.textLabel.linkDetectionTypes = KILinkTypeOptionURL;
+    self.textLabel.selectedLinkBackgroundColor = [UIColor clearColor];
+    [self.textLabel setAttributes:@{NSForegroundColorAttributeName:[UIColor colorWithRed:0x02/255.0 green:0xfd/255.0  blue:0x20/255.0  alpha:1]} forLinkType:KILinkTypeURL];
     self.textLabel.accessibilityIdentifier = @"text_label";
     self.textLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.textLabel.backgroundColor = [UIColor clearColor];

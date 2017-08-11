@@ -227,7 +227,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     [self _setupConstraints];
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bubbleViewTapAction:)];
-  //  tapRecognizer.delegate = self;
+    tapRecognizer.delegate = self;
     [_bubbleView addGestureRecognizer:tapRecognizer];
     
     UITapGestureRecognizer *tapRecognizer2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarViewTapAction:)];
@@ -235,20 +235,21 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 }
 
 #pragma mark tapGestureRecgnizerdelegate 解决手势冲突
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-//    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] &&
-//        self.model.bodyType==EMMessageBodyTypeText) {
-//        CGPoint pt = [touch locationInView:self.bubbleView.textLabel];
-//        TTTAttributedLabelLink *link = [self.bubbleView.textLabel linkAtPoint:pt];
-//        if (link) {
-//            if (_delegate && [_delegate respondsToSelector:@selector(didSelectLinkWithURL:)]) {
-//                [_delegate didSelectLinkWithURL:link.result.URL];
-//            }
-//            return NO;
-//        }
-//    }
-//    return YES;
-//}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] &&
+        self.model.bodyType==EMMessageBodyTypeText) {
+        CGPoint pt = [touch locationInView:self.bubbleView.textLabel];
+        NSDictionary *attr = [self.bubbleView.textLabel linkAtPoint:pt];
+        if (attr && [attr[KILabelLinkTypeKey] intValue]==KILinkTypeURL) {
+            NSURL *url = [NSURL URLWithString:attr[KILabelLinkKey]];
+            if (_delegate && [_delegate respondsToSelector:@selector(didSelectLinkWithURL:)]) {
+                [_delegate didSelectLinkWithURL:url];
+            }
+            return NO;
+        }
+    }
+    return YES;
+}
 
 #pragma mark - Setup Constraints
 
@@ -386,67 +387,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             case EMMessageBodyTypeText:
             {
                 _bubbleView.textLabel.attributedText = [[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
-                
-               // TODO: add link
-                
-                
-//                NSMutableAttributedString *attributedText = (NSMutableAttributedString *)[[EaseEmotionEscape sharedInstance] attStringFromTextForChatting:model.text textFont:kEMMessageTextFont];
-//                if (self.model.isSender) {
-//                    [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, model.text.length)];
-//                }
-//                else{
-//                    [attributedText addAttribute:NSForegroundColorAttributeName value:_messageTextColor range:NSMakeRange(0, model.text.length)];
-//                }
-//                attributedText = [EaseMessageCell addPragraphLineSpacingForString:attributedText];
-//                
-//                [_bubbleView.textLabel setText:attributedText];
-//                
-//                id obj = [model.message.ext objectForKey:kMessageLinkList];
-//                if (obj==nil) {
-//                    // ext不存在时处理文本得到link
-//                    NSArray *linkRanges = [EaseSDKHelper parseUrlInMessage:model.text];
-//                    if (linkRanges.count) {
-//                        NSMutableArray *linkExts = [NSMutableArray arrayWithCapacity:linkRanges.count];
-//                        for (NSValue *val in linkRanges) {
-//                            NSRange range = [val rangeValue];
-//                            [linkExts addObject:[NSString stringWithFormat:@"%d,%d", range.location, range.length]];
-//                        }
-//                        NSMutableDictionary *mExtDict = [NSMutableDictionary dictionaryWithDictionary:model.message.ext?:@{}];
-//                        [mExtDict setObject:linkExts forKey:kMessageLinkList];
-//                        
-//                        model.message.ext = mExtDict;
-//                        obj = linkExts;
-//                    }else{ // 占位用，不需要每次解析
-//                        NSMutableDictionary *mExtDict = [NSMutableDictionary dictionaryWithDictionary:model.message.ext?:@{}];
-//                        [mExtDict setObject:@[] forKey:kMessageLinkList];
-//                        model.message.ext = mExtDict;
-//                    }
-//                }
-//                
-//                if ([obj isKindOfClass:[NSArray class]] && [obj count]) { // 存在link ext
-//                    NSArray *links = obj;
-//                    for (NSString *str in links) {
-//                        NSArray<NSString*> *arr = [str componentsSeparatedByString:@","];
-//                        if (arr.count==2) {
-//                            NSRange range = NSMakeRange([arr[0] intValue], [arr[1] intValue]);
-//                            NSURL *linkUrl = [NSURL URLWithString:[model.text substringWithRange:range]];
-//                            NSMutableDictionary *linkAttributes = [NSMutableDictionary dictionaryWithDictionary:_bubbleView.textLabel.linkAttributes];
-//                            [linkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-////                            UIColor *linkColor;
-////                            if (model.isSender) {
-////                                linkColor=[UIColor whiteColor];
-////                            }
-////                            else{
-////                                linkColor = _messageTextColor;
-////                            }
-////                            [linkAttributes setValue:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-//                            [linkAttributes setValue:(__bridge id)[UIColor colorWithRed:0x02/255.0 green:0xfd/255.0  blue:0x20/255.0  alpha:1].CGColor forKey:(NSString *)kCTForegroundColorAttributeName];
-//                            _bubbleView.textLabel.linkAttributes = linkAttributes;
-//                            [_bubbleView.textLabel addLinkToURL:linkUrl withRange:range];
-//                        }
-//                    }
-//                    _bubbleView.textLabel.userInteractionEnabled = YES;
-//                }
+                _bubbleView.textLabel.userInteractionEnabled = YES;
             }
                 break;
             case EMMessageBodyTypeImage:
