@@ -100,7 +100,10 @@ typedef enum{
  */
 @property (strong, nonatomic) UIImage *recvBubbleBackgroundImage UI_APPEARANCE_SELECTOR;
 
-
+/*
+ *  消息显示字体
+ */
+@property (nonatomic) UIFont *messageTextFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:15];
 
 /*
  *  消息显示颜色

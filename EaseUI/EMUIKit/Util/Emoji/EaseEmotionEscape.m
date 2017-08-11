@@ -119,9 +119,9 @@ static EaseEmotionEscape *_sharedInstance = nil;
 - (NSAttributedString *) attStringFromTextForChatting:(NSString *) aInputText textFont:(UIFont*)font
 {
     NSMutableAttributedString * string = [self attributtedStringFromText:aInputText];
-//    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//    paragraphStyle.lineSpacing = 0.0;
-//    [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [string length])];
+    NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineSpacing = 4.0;
+    [string addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [string length])];
     if (font) {
         [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
     }

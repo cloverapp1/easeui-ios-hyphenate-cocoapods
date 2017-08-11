@@ -41,14 +41,14 @@
 
 - (void)setupTextBubbleView
 {
-    self.textLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
+    self.textLabel = [[UILabel alloc] init];
     self.textLabel.accessibilityIdentifier = @"text_label";
     self.textLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.textLabel.backgroundColor = [UIColor clearColor];
     self.textLabel.numberOfLines = 0;
-    self.textLabel.font = [UIFont systemFontOfSize:15];
+    self.textLabel.font = [UIFont systemFontOfSize:16];
     [self.backgroundImageView addSubview:self.textLabel];
-    self.textLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    
     [self _setupTextBubbleConstraints];
 }
 

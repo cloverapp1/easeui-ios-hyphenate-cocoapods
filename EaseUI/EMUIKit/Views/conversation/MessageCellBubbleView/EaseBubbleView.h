@@ -12,7 +12,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import "TTTAttributedLabel.h"
+//#import "TTTAttributedLabel.h"
 #import "EaseBubbleViewImageView.h"
 
 
@@ -48,7 +48,7 @@ extern NSString *const EaseMessageCellIdentifierRecvFile;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
 
 //text views
-@property (strong, nonatomic) TTTAttributedLabel *textLabel;
+@property (strong, nonatomic) UILabel *textLabel;
 
 //image views
 @property (strong, nonatomic) EaseBubbleViewImageView *imageView;
