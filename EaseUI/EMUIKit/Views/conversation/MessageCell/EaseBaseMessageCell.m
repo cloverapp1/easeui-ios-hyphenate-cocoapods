@@ -19,6 +19,7 @@
 @property (strong, nonatomic) UILabel *nameLabel;
 
 @property (nonatomic) NSLayoutConstraint *nameHeightConstraint;
+@property (nonatomic) NSLayoutConstraint *nameMessageMarginConstraint;
 
 @property (nonatomic) NSLayoutConstraint *bubbleWithAvatarRightConstraint;
 @property (nonatomic) NSLayoutConstraint *bubbleWithoutAvatarRightConstraint;
@@ -43,9 +44,7 @@
     cell.messageNameColor = [UIColor colorWithRed:0x66/255.0 green:0x66/255.0 blue:0x66/255.0 alpha:1];
     cell.messageNameFont = [UIFont systemFontOfSize:11];
     cell.messageNameHeight = 16;
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
-        cell.messageNameIsHidden = NO;
-    }
+    cell.messageNameIsHidden = NO;
 
 }
 
@@ -66,9 +65,6 @@
         
         [self configureLayoutConstraintsWithModel:model];
         
-        if ([UIDevice currentDevice].systemVersion.floatValue == 7.0) {
-            self.messageNameHeight = 16;
-        }
     }
     
     return self;
@@ -170,7 +166,9 @@
     
     //bubble view
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-EaseMessageCellBubblePadding]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+    
+    self.nameMessageMarginConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+    [self addConstraint:self.nameMessageMarginConstraint];
     
     //status button
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.bubbleView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-EaseMessageCellPadding]];
@@ -207,7 +205,8 @@
     
     //bubble view
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.avatarView attribute:NSLayoutAttributeRight multiplier:1.0 constant:EaseMessageCellBubblePadding]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+    self.nameMessageMarginConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+    [self addConstraint:self.nameMessageMarginConstraint];
 }
 
 #pragma mark - Update Constraint
@@ -225,6 +224,12 @@
         
         self.nameHeightConstraint = [NSLayoutConstraint constraintWithItem:self.nameLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.messageNameHeight];
         [self addConstraint:self.nameHeightConstraint];
+        
+        [self removeConstraint:self.nameMessageMarginConstraint];
+        
+        self.nameMessageMarginConstraint = [NSLayoutConstraint constraintWithItem:self.bubbleView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.nameLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:self.messageNameHeight < 0.1 ? 0 : kEMNameMessageMargin];
+        [self addConstraint:self.nameMessageMarginConstraint];
+        
     }
 }
 
@@ -328,11 +333,8 @@
     EaseBaseMessageCell *cell = [self appearance];
     
     CGFloat minHeight = kEMAvatarSize + EaseMessageCellPadding * 2;
-    CGFloat height = cell.messageNameHeight;
-    if ([UIDevice currentDevice].systemVersion.floatValue == 7.0) {
-        height = 16;
-    }
-    height += - EaseMessageCellPadding + [EaseMessageCell cellHeightWithModel:model];
+    CGFloat height = 0;
+    height = [EaseMessageCell cellHeightWithModel:model];
     height = height > minHeight ? height : minHeight;
     
     return height;

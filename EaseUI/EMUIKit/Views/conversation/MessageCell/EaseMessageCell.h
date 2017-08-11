@@ -24,11 +24,13 @@
 /** @brief 位置消息cell的高度 */
 #define kEMMessageLocationHeight 95
 /** @brief 语音消息cell的高度 */
-#define kEMMessageVoiceHeight 23
+#define kEMMessageVoiceHeight 33
 /** @brief 头像尺寸大小 */
 #define kEMAvatarSize 37
 /** @brief 消息显示字体 */
 #define kEMMessageTextFont [UIFont systemFontOfSize:16]
+/** @brief 昵称气泡间距 */
+#define kEMNameMessageMargin 3.5
 
 extern CGFloat const EaseMessageCellPadding;
 extern CGFloat const EaseMessageCellBubblePadding;
@@ -71,6 +73,7 @@ typedef enum{
 
 @property (strong, nonatomic) id<IMessageModel> model;
 
+
 /*
  *  状态按钮尺寸
  */
@@ -86,9 +89,9 @@ typedef enum{
  */
 @property (nonatomic) CGFloat bubbleMaxWidth UI_APPEARANCE_SELECTOR; //;
 
-@property (nonatomic) UIEdgeInsets leftBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 17, 8, 10);
+@property (nonatomic) UIEdgeInsets leftBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(12, 22, 12, 15);
 
-@property (nonatomic) UIEdgeInsets rightBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 10, 8, 17);
+@property (nonatomic) UIEdgeInsets rightBubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(12, 22, 12, 15);
 
 /*
  *  发送者气泡图片
@@ -138,7 +141,7 @@ typedef enum{
 /*
  *  语音消息显示字体
  */
-@property (nonatomic) UIFont *messageVoiceDurationFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:12];
+@property (nonatomic) UIFont *messageVoiceDurationFont UI_APPEARANCE_SELECTOR; //default [UIFont systemFontOfSize:15];
 
 /*
  *  文件消息名称显示字体

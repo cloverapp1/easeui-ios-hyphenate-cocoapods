@@ -45,7 +45,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     EMMessageBodyType _messageType;
 }
 
-@property (nonatomic) UIEdgeInsets bubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(8, 0, 8, 0);
+@property (nonatomic) UIEdgeInsets bubbleMargin UI_APPEARANCE_SELECTOR; //default UIEdgeInsetsMake(6, 0, 6, 0);
 
 @property (nonatomic) NSLayoutConstraint *statusWidthConstraint;
 @property (nonatomic) NSLayoutConstraint *activtiyWidthConstraint;
@@ -68,9 +68,9 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     EaseMessageCell *cell = [self appearance];
     cell.statusSize = 20;
     cell.activitySize = 20;
-    cell.leftBubbleMargin = UIEdgeInsetsMake(12, 22, 12, 15);
-    cell.rightBubbleMargin = UIEdgeInsetsMake(12, 15, 12, 22);
-    cell.bubbleMargin = UIEdgeInsetsMake(12, 0, 12, 0);
+    cell.leftBubbleMargin = UIEdgeInsetsMake(6, 22, 6, 15);
+    cell.rightBubbleMargin = UIEdgeInsetsMake(6, 15, 6, 22);
+    cell.bubbleMargin = UIEdgeInsetsMake(6, 0, 6, 0);
     cell.bubbleMaxWidth = [UIScreen mainScreen].bounds.size.width - (kEMAvatarSize + EaseMessageCellPadding) * 2.0 - EaseMessageCellBubblePadding * 2.0 - 7;
     
     cell.messageTextColor = [UIColor blackColor];
@@ -79,7 +79,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     cell.messageLocationColor = [UIColor whiteColor];
     
     cell.messageVoiceDurationColor = [UIColor grayColor];
-    cell.messageVoiceDurationFont = [UIFont systemFontOfSize:12];
+    cell.messageVoiceDurationFont = [UIFont systemFontOfSize:15];
     
     cell.messageFileNameColor = [UIColor blackColor];
     cell.messageFileNameFont = [UIFont systemFontOfSize:13];
@@ -431,11 +431,17 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                     }
                 }
                 if (!self.model.isSender) {
+                    
+                    _messageVoiceDurationColor = [UIColor colorWithWhite:0x99/255.0 alpha:1];
                     if (self.model.isMediaPlayed){
                         _bubbleView.isReadView.hidden = YES;
+                        
                     } else {
                         _bubbleView.isReadView.hidden = NO;
+                        
                     }
+                }else {
+                    _messageVoiceDurationColor = [UIColor whiteColor];
                 }
                 
                 if (_model.isMediaPlaying) {
@@ -541,7 +547,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                     break;
                 case EMMessageBodyTypeVoice:
                 {
-                    [_bubbleView updateVoiceMargin:_bubbleMargin];
+                    UIEdgeInsets margin = UIEdgeInsetsMake(_bubbleMargin.top + 5, _bubbleMargin.left, _bubbleMargin.bottom + 5, _bubbleMargin.right);
+                    [_bubbleView updateVoiceMargin:margin];
                 }
                     break;
                 case EMMessageBodyTypeVideo:
@@ -863,7 +870,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     if (model.message.chatType == EMChatTypeChat || model.isSender) {
         height = cell.bubbleMargin.top + cell.bubbleMargin.bottom;
     }else {
-        height = 16 + cell.bubbleMargin.top + cell.bubbleMargin.bottom;
+        height = 16 + kEMNameMessageMargin + cell.bubbleMargin.top + cell.bubbleMargin.bottom;
     }
     
     switch (model.bodyType) {
@@ -939,7 +946,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             break;
     }
 
-    height += EaseMessageCellPadding;
+    height += EaseMessageCellPadding * 2.0;
     model.cellHeight = height;
     
     return height;
