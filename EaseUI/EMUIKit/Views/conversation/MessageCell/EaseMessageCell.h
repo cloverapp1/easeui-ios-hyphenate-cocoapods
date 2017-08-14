@@ -74,15 +74,15 @@ typedef enum{
 @property (strong, nonatomic) id<IMessageModel> model;
 
 
-/*
- *  状态按钮尺寸
- */
-@property (nonatomic) CGFloat statusSize UI_APPEARANCE_SELECTOR; //default 20;
-
-/*
- *  加载尺寸
- */
-@property (nonatomic) CGFloat activitySize UI_APPEARANCE_SELECTOR; //default 20;
+///*
+// *  状态按钮尺寸
+// */
+//@property (nonatomic) CGFloat statusSize UI_APPEARANCE_SELECTOR; //default 20;
+//
+///*
+// *  加载尺寸
+// */
+//@property (nonatomic) CGFloat activitySize UI_APPEARANCE_SELECTOR; //default 20;
 
 /*
  *  聊天气泡的最大宽度

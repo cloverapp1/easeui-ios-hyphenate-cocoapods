@@ -23,6 +23,8 @@
 #import "EaseLocalDefine.h"
 #import "EaseSDKHelper.h"
 
+#define ActivitySize (25)
+
 CGFloat const EaseMessageCellPadding = 10;
 CGFloat const EaseMessageCellBubblePadding = 4;
 
@@ -66,8 +68,8 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 {
     // UIAppearance Proxy Defaults
     EaseMessageCell *cell = [self appearance];
-    cell.statusSize = 20;
-    cell.activitySize = 20;
+//    cell.statusSize = 20;
+//    cell.activitySize = 20;
     cell.leftBubbleMargin = UIEdgeInsetsMake(6, 22, 6, 15);
     cell.rightBubbleMargin = UIEdgeInsetsMake(6, 15, 6, 22);
     cell.bubbleMargin = UIEdgeInsetsMake(6, 0, 6, 0);
@@ -278,13 +280,13 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
 //    self.bubbleMaxWidthConstraint.active = YES;
     
     //status button
-    self.statusWidthConstraint = [NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.statusSize];
+    self.statusWidthConstraint = [NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:ActivitySize];
     [self addConstraint:self.statusWidthConstraint];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.statusButton attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
     
     //activtiy
-    self.activtiyWidthConstraint = [NSLayoutConstraint constraintWithItem:self.activity attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:self.activitySize];
+    self.activtiyWidthConstraint = [NSLayoutConstraint constraintWithItem:self.activity attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:ActivitySize];
     [self addConstraint:self.activtiyWidthConstraint];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.activity attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.activity attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.activity attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0]];
@@ -324,7 +326,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     if (_statusButton) {
         [self removeConstraint:self.statusWidthConstraint];
         
-        self.statusWidthConstraint = [NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:self.statusSize];
+        self.statusWidthConstraint = [NSLayoutConstraint constraintWithItem:self.statusButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:ActivitySize];
         [self addConstraint:self.statusWidthConstraint];
     }
 }
@@ -340,7 +342,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     if (_activity) {
         [self removeConstraint:self.activtiyWidthConstraint];
         
-        self.statusWidthConstraint = [NSLayoutConstraint constraintWithItem:self.activity attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:self.activitySize];
+        self.statusWidthConstraint = [NSLayoutConstraint constraintWithItem:self.activity attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:0 constant:ActivitySize];
         [self addConstraint:self.activtiyWidthConstraint];
     }
 }
@@ -485,17 +487,17 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     }
 }
 
-- (void)setStatusSize:(CGFloat)statusSize
-{
-    _statusSize = statusSize;
-    [self _updateStatusButtonWidthConstraint];
-}
-
-- (void)setActivitySize:(CGFloat)activitySize
-{
-    _activitySize = activitySize;
-    [self _updateActivityWidthConstraint];
-}
+//- (void)setStatusSize:(CGFloat)statusSize
+//{
+//    _statusSize = statusSize;
+//    [self _updateStatusButtonWidthConstraint];
+//}
+//
+//- (void)setActivitySize:(CGFloat)activitySize
+//{
+//    _activitySize = activitySize;
+//    [self _updateActivityWidthConstraint];
+//}
 
 - (void)setSendBubbleBackgroundImage:(UIImage *)sendBubbleBackgroundImage
 {
