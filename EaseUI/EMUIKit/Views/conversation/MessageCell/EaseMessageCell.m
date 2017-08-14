@@ -78,7 +78,7 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     cell.messageLocationFont = [UIFont systemFontOfSize:10];
     cell.messageLocationColor = [UIColor whiteColor];
     
-    cell.messageVoiceDurationColor = [UIColor grayColor];
+//    cell.messageVoiceDurationColor = [UIColor grayColor];
     cell.messageVoiceDurationFont = [UIFont systemFontOfSize:15];
     
     cell.messageFileNameColor = [UIColor blackColor];
@@ -198,7 +198,11 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
             case EMMessageBodyTypeVoice:
             {
                 [_bubbleView setupVoiceBubbleView];
-                
+                if (!model.isSender) {
+                    _messageVoiceDurationColor = [UIColor colorWithWhite:0x99/255.0 alpha:1];
+                }else {
+                    _messageVoiceDurationColor = [UIColor whiteColor];
+                }
                 _bubbleView.voiceDurationLabel.textColor = _messageVoiceDurationColor;
                 _bubbleView.voiceDurationLabel.font = _messageVoiceDurationFont;
             }
@@ -450,7 +454,6 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
                 else{
                     [_bubbleView.voiceImageView stopAnimating];
                 }
-                
                 _bubbleView.voiceDurationLabel.text = [NSString stringWithFormat:@"%d''",(int)_model.mediaDuration];
             }
                 break;
