@@ -25,7 +25,7 @@
 
 #define ActivitySize (25)
 
-CGFloat const EaseMessageCellPadding = 10;
+CGFloat const EaseMessageCellPadding = 12;
 CGFloat const EaseMessageCellBubblePadding = 4;
 
 NSString *const EaseMessageCellIdentifierRecvText = @"EaseMessageCellRecvText";
@@ -872,11 +872,11 @@ NSString *const EaseMessageCellIdentifierSendFile = @"EaseMessageCellSendFile";
     bubbleMaxWidth -= (cell.leftBubbleMargin.left + cell.leftBubbleMargin.right + cell.rightBubbleMargin.left + cell.rightBubbleMargin.right)/2;
     
     CGFloat height;
-    if (model.message.chatType == EMChatTypeChat || model.isSender) {
+//    if (model.message.chatType == EMChatTypeChat || model.isSender) {
         height = cell.bubbleMargin.top + cell.bubbleMargin.bottom;
-    }else {
-        height = 16 + kEMNameMessageMargin + cell.bubbleMargin.top + cell.bubbleMargin.bottom;
-    }
+//    }else {
+//        height = 16 + kEMNameMessageMargin + cell.bubbleMargin.top + cell.bubbleMargin.bottom;
+//    }
     
     switch (model.bodyType) {
         case EMMessageBodyTypeText:

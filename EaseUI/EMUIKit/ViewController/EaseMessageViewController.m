@@ -79,7 +79,7 @@
         _conversation = [[EMClient sharedClient].chatManager getConversation:conversationChatter type:conversationType createIfNotExist:YES];
         
         _messageCountOfPage = 10;
-        _timeCellHeight = 30;
+        _timeCellHeight = 32;
         _deleteConversationIfNull = YES;
         _scrollToBottomWhenAppear = YES;
         _messsagesSource = [NSMutableArray array];

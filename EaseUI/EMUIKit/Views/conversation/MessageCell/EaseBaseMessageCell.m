@@ -334,7 +334,12 @@
     
     CGFloat minHeight = kEMAvatarSize + EaseMessageCellPadding * 2;
     CGFloat height = 0;
-    height = [EaseMessageCell cellHeightWithModel:model];
+    if (model.message.chatType == EMChatTypeChat || model.isSender) {
+        
+    }else {
+        height = cell.messageNameHeight + kEMNameMessageMargin;
+    }
+    height += [EaseMessageCell cellHeightWithModel:model];
     height = height > minHeight ? height : minHeight;
     
     return height;
