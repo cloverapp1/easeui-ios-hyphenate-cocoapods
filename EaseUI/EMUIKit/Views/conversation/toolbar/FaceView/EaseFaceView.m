@@ -36,6 +36,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.facialView];
+        [self _addLineView];
         [self _setupButtom];
     }
     return self;
@@ -54,9 +55,16 @@
 {
     if (_facialView == nil) {
         _facialView = [[EaseFacialView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 150)];
+        _facialView.backgroundColor = [UIColor whiteColor];
         _facialView.delegate = self;
     }
     return _facialView;
+}
+
+- (void)_addLineView {
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_facialView.frame), 0.5)];
+    lineView.backgroundColor = [UIColor colorWithRed:204/255.0 green:204/255.0 blue:204/255.0 alpha:1];
+    [self addSubview:lineView];
 }
 
 - (void)_setupButtom
@@ -66,7 +74,12 @@
     _bottomScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, CGRectGetMaxY(_facialView.frame), 4 * CGRectGetWidth(_facialView.frame)/5, self.frame.size.height - CGRectGetHeight(_facialView.frame))];
     _bottomScrollView.showsHorizontalScrollIndicator = NO;
     [self addSubview:_bottomScrollView];
+    _bottomScrollView.backgroundColor = [UIColor whiteColor];
     [self _setupButtonScrollView];
+    
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_bottomScrollView.frame), 0.5)];
+    lineView.backgroundColor = [UIColor colorWithRed:245/255.0 green:245/255.0 blue:245/255.0 alpha:1];
+    [_bottomScrollView addSubview:lineView];
     
     UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sendButton.frame = CGRectMake((kButtomNum-1)*CGRectGetWidth(_facialView.frame)/kButtomNum, CGRectGetMaxY(_facialView.frame), CGRectGetWidth(_facialView.frame)/kButtomNum, CGRectGetHeight(_bottomScrollView.frame));

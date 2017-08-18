@@ -80,6 +80,10 @@
     _scrollview.delegate = self;
     [self addSubview:_scrollview];
     
+    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), 0.5)];
+    lineView.backgroundColor = [UIColor colorWithRed:204/255.0 green:204/255.0 blue:204/255.0 alpha:1];
+    [self addSubview:lineView];
+    
     _pageControl = [[UIPageControl alloc] init];
     _pageControl.currentPage = 0;
     _pageControl.numberOfPages = 1;
